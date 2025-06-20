@@ -384,13 +384,3 @@ h1 {
     100% { transform: scale(1); }
 }
 
-.auth-toggle {
-    text-align: center;
-    margin-top: 10px;
-}
-
-.auth-toggle a {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 600;
-}
