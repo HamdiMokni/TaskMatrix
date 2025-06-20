@@ -22,6 +22,12 @@
     <div id="matrix" class="container" style="display:none;">
         <h1>Priority vs Urgency Matrix</h1>
 
+        <div class="project-input">
+            <input type="text" id="project-name" placeholder="Project name" maxlength="100">
+            <input type="text" id="project-icon" placeholder="Icon" maxlength="2">
+            <button class="add-btn" id="add-project">Add Project</button>
+        </div>
+
         <div class="task-input">
             <input type="text" id="task-input" placeholder="Enter a new task..." maxlength="200">
             <select id="quadrant-select">
@@ -29,6 +35,9 @@
                 <option value="plan">📅 PLAN (Important, Not Urgent)</option>
                 <option value="delegate">👥 DELEGATE (Urgent, Not Important)</option>
                 <option value="eliminate">🗑️ ELIMINATE (Not Urgent, Not Important)</option>
+            </select>
+            <select id="project-select">
+                <option value="">No Project</option>
             </select>
             <button class="add-btn" id="add-task">Add Task</button>
         </div>

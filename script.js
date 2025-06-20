@@ -11,8 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const printBtn = document.getElementById('print');
     const clearBtn = document.getElementById('clear');
 
+    const addProjectBtn = document.getElementById('add-project');
+    const projectNameInput = document.getElementById('project-name');
+    const projectIconInput = document.getElementById('project-icon');
+    const projectSelect = document.getElementById('project-select');
+
     const QUADRANTS = ['do-now', 'plan', 'delegate', 'eliminate'];
     let tasks = { 'do-now': [], 'plan': [], 'delegate': [], 'eliminate': [] };
+    let projects = [];
 
     checkAuth();
 
@@ -24,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearBtn.addEventListener('click', clearAll);
     authBtn.addEventListener('click', authSubmit);
     logoutBtn.addEventListener('click', logout);
+    addProjectBtn.addEventListener('click', addProject);
 
     const lists = document.querySelectorAll('.task-list');
     lists.forEach(list => {
@@ -73,8 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = input.value.trim();
         if (!text) return;
         const q = select.value;
+        const projectId = projectSelect.value;
         const list = document.getElementById(q).querySelector('.task-list');
-        const item = createTaskItem({ id: Date.now().toString(), text });
+        const item = createTaskItem({ id: Date.now().toString(), text, projectId });
         list.appendChild(item);
         input.value = '';
         saveState();
@@ -86,7 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
         li.className = 'task';
         li.draggable = true;
         li.dataset.id = task.id;
-        li.textContent = task.text;
+        li.dataset.project = task.projectId || '';
+
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'task-project-icon';
+        const proj = projects.find(p => p.id === task.projectId);
+        iconSpan.textContent = proj ? proj.icon || '' : '';
+
+        const textSpan = document.createElement('span');
+        textSpan.className = 'task-text';
+        textSpan.textContent = task.text;
+
+        li.appendChild(iconSpan);
+        li.appendChild(textSpan);
 
         const del = document.createElement('button');
         del.textContent = '\u00D7';
@@ -103,7 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tasks[q] = [];
             const items = document.getElementById(q).querySelectorAll('.task');
             items.forEach(li => {
-                tasks[q].push({ id: li.dataset.id, text: li.firstChild.textContent.trim() });
+                tasks[q].push({
+                    id: li.dataset.id,
+                    text: li.querySelector('.task-text').textContent.trim(),
+                    projectId: li.dataset.project || ''
+                });
             });
         });
         await fetch('/api/tasks', {
@@ -120,6 +144,42 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) return await res.json();
         } catch (e) {}
         return { 'do-now': [], 'plan': [], 'delegate': [], 'eliminate': [] };
+    }
+
+    async function loadProjects() {
+        try {
+            const res = await fetch('/api/projects');
+            if (res.ok) return await res.json();
+        } catch (e) {}
+        return [];
+    }
+
+    async function addProject() {
+        const name = projectNameInput.value.trim();
+        if (!name) return;
+        const icon = projectIconInput.value.trim();
+        const res = await fetch('/api/projects', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, icon })
+        });
+        if (res.ok) {
+            const data = await res.json();
+            projects.push({ id: data.id, name, icon });
+            renderProjectOptions();
+            projectNameInput.value = '';
+            projectIconInput.value = '';
+        }
+    }
+
+    function renderProjectOptions() {
+        projectSelect.innerHTML = '<option value="">No Project</option>';
+        projects.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = `${p.icon ? p.icon + ' ' : ''}${p.name}`;
+            projectSelect.appendChild(opt);
+        });
     }
 
     async function clearAll() {
@@ -155,7 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
             logoutBtn.style.display = '';
             matrixBox.style.display = '';
             showAuthError('');
-            loadTasks().then(renderTasks);
+            Promise.all([loadTasks(), loadProjects()]).then(([t, p]) => {
+                renderTasks(t);
+                projects = p;
+                renderProjectOptions();
+            });
         } else {
             authBox.style.display = '';
             logoutBtn.style.display = 'none';
