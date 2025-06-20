@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const projectNameInput = document.getElementById('project-name');
     const projectIconInput = document.getElementById('project-icon');
     const projectSelect = document.getElementById('project-select');
+    const projectList = document.getElementById('project-list');
     const iconOptionButtons = document.querySelectorAll('.icon-option');
 
     const QUADRANTS = ['do-now', 'plan', 'delegate', 'eliminate'];
@@ -122,11 +123,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const proj = projects.find(p => p.id === task.projectId);
         iconSpan.textContent = proj ? proj.icon || '' : '';
 
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'task-project-name';
+        nameSpan.textContent = proj ? proj.name : '';
+
         const textSpan = document.createElement('span');
         textSpan.className = 'task-text';
         textSpan.textContent = task.text;
 
         li.appendChild(iconSpan);
+        li.appendChild(nameSpan);
         li.appendChild(textSpan);
 
         const del = document.createElement('button');
@@ -203,6 +209,41 @@ document.addEventListener('DOMContentLoaded', () => {
             opt.textContent = `${p.icon ? p.icon + ' ' : ''}${p.name}`;
             projectSelect.appendChild(opt);
         });
+        renderProjectList();
+    }
+
+    function renderProjectList() {
+        if (!projectList) return;
+        projectList.innerHTML = '';
+        projects.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'project-item';
+            const span = document.createElement('span');
+            span.textContent = `${p.icon ? p.icon + ' ' : ''}${p.name}`;
+            const btn = document.createElement('button');
+            btn.textContent = '\u00D7';
+            btn.addEventListener('click', () => removeProject(p.id));
+            div.appendChild(span);
+            div.appendChild(btn);
+            projectList.appendChild(div);
+        });
+    }
+
+    async function removeProject(id) {
+        const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+            projects = projects.filter(p => p.id !== id);
+            // remove project from tasks in UI
+            document.querySelectorAll(`.task[data-project='${id}']`).forEach(li => {
+                li.dataset.project = '';
+                const iconSpan = li.querySelector('.task-project-icon');
+                const nameSpan = li.querySelector('.task-project-name');
+                if (iconSpan) iconSpan.textContent = '';
+                if (nameSpan) nameSpan.textContent = '';
+            });
+            renderProjectOptions();
+            saveState();
+        }
     }
 
     async function clearAll() {

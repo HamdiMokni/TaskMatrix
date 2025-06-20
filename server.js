@@ -142,6 +142,16 @@ app.post('/api/projects', (req, res) => {
   res.status(201).json({ id });
 });
 
+app.delete('/api/projects/:id', (req, res) => {
+  if (!req.session.user) return res.status(401).end();
+  const projects = loadProjects();
+  const userProjects = projects[req.session.user] || [];
+  const newProjects = userProjects.filter(p => p.id !== req.params.id);
+  projects[req.session.user] = newProjects;
+  saveProjects(projects);
+  res.status(204).end();
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
