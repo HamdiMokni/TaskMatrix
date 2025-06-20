@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priority vs Urgency Matrix</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Priority vs Urgency Matrix</h1>
+    </header>
+    <section class="controls">
+        <input type="text" id="task-input" placeholder="New task">
+        <select id="quadrant-select">
+            <option value="do-now">DO NOW</option>
+            <option value="plan">PLAN</option>
+            <option value="delegate">DELEGATE</option>
+            <option value="eliminate">ELIMINATE</option>
+        </select>
+        <button id="add-task">Add Task</button>
+        <button id="print">Print</button>
+    </section>
+    <main id="matrix">
+        <div class="quadrant" id="do-now" data-title="DO NOW">
+            <h2>DO NOW</h2>
+            <ul class="task-list"></ul>
+        </div>
+        <div class="quadrant" id="plan" data-title="PLAN">
+            <h2>PLAN</h2>
+            <ul class="task-list"></ul>
+        </div>
+        <div class="quadrant" id="delegate" data-title="DELEGATE">
+            <h2>DELEGATE</h2>
+            <ul class="task-list"></ul>
+        </div>
+        <div class="quadrant" id="eliminate" data-title="ELIMINATE">
+            <h2>ELIMINATE</h2>
+            <ul class="task-list"></ul>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
