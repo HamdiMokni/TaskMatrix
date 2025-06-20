@@ -492,6 +492,10 @@ h1 {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
+.modal-content h2 {
+    margin-bottom: 10px;
+}
+
 .modal-content input {
     width: 100%;
     padding: 10px 15px;
@@ -510,15 +514,15 @@ h1 {
 }
 
 .icon-option {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 2px solid #e0e0e0;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 30px;
     background: #f8f9fa;
     transition: all 0.2s ease;
 }
