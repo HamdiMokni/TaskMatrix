@@ -1,6 +1,6 @@
 # TaskMatrix
 
-TaskMatrix is a lightweight tool for managing tasks with the Eisenhower priority matrix. It provides a modern web interface backed by a small Node.js server so your tasks are persisted between sessions.
+TaskMatrix is a lightweight tool for managing tasks with the Eisenhower priority matrix. It provides a modern web interface backed by a small Node.js server so your tasks are persisted between sessions. The interface has been rewritten in **React** to make the UI easier to extend.
 
 ## Installation
 
