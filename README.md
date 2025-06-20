@@ -19,7 +19,7 @@ npm start
 
 Open <http://localhost:3000> in your browser to use the app.
 
-The server stores tasks in a local `tasks.json` file. The file will be created automatically when you first add or modify tasks.
+Create an account via the sign‑up form to start using TaskMatrix. Each user has their own task list stored in `tasks.json` alongside credentials in `users.json`.
 
 ## Features
 
@@ -29,6 +29,7 @@ The server stores tasks in a local `tasks.json` file. The file will be created a
 - Reorder tasks within a quadrant using drag and drop
 - Delete tasks with the × button
 - Persist tasks to disk using the included Node.js server
+- User accounts with sign-up and sign-in
 - Clear all tasks via the **Clear All** button
 - Print-friendly view via the **Print** button
 - Responsive design for desktop and mobile devices
