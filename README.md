@@ -25,6 +25,7 @@ Create an account via the sign‑up form to start using TaskMatrix. Each user ha
 
 - Four quadrants: **DO NOW**, **PLAN**, **DELEGATE**, and **ELIMINATE**
 - Add tasks to any quadrant
+- Optional projects with custom icons to group tasks
 - Drag and drop tasks between quadrants
 - Reorder tasks within a quadrant using drag and drop
 - Delete tasks with the × button
@@ -41,6 +42,7 @@ Create an account via the sign‑up form to start using TaskMatrix. Each user ha
 - `script.js` – Front-end logic and drag-and-drop handling
 - `server.js` – Express server serving static files and saving tasks
 - `tasks.json` – Generated storage file for your tasks
+- `projects.json` – Generated storage file for your projects
 
 ## Contributing
 

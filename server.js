@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const TASKS_FILE = path.join(__dirname, 'tasks.json');
 const USERS_FILE = path.join(__dirname, 'users.json');
+const PROJECTS_FILE = path.join(__dirname, 'projects.json');
 
 app.use(express.json());
 app.use(session({
@@ -45,6 +46,21 @@ function loadUsers() {
 
 function saveUsers(users) {
   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+}
+
+function loadProjects() {
+  if (fs.existsSync(PROJECTS_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(PROJECTS_FILE, 'utf8'));
+    } catch (_) {
+      return {};
+    }
+  }
+  return {};
+}
+
+function saveProjects(projects) {
+  fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 2));
 }
 
 app.get('/api/me', (req, res) => {
@@ -105,6 +121,25 @@ app.delete('/api/tasks', (req, res) => {
   tasks[req.session.user] = { 'do-now': [], 'plan': [], 'delegate': [], 'eliminate': [] };
   saveTasks(tasks);
   res.status(204).end();
+});
+
+app.get('/api/projects', (req, res) => {
+  if (!req.session.user) return res.status(401).end();
+  const projects = loadProjects();
+  res.json(projects[req.session.user] || []);
+});
+
+app.post('/api/projects', (req, res) => {
+  if (!req.session.user) return res.status(401).end();
+  const { name, icon } = req.body || {};
+  if (!name) return res.status(400).json({ error: 'Name required' });
+  const projects = loadProjects();
+  const userProjects = projects[req.session.user] || [];
+  const id = Date.now().toString();
+  userProjects.push({ id, name, icon });
+  projects[req.session.user] = userProjects;
+  saveProjects(projects);
+  res.status(201).json({ id });
 });
 
 app.listen(PORT, () => {

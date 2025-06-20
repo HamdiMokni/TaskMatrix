@@ -39,6 +39,15 @@ h1 {
     justify-content: center;
 }
 
+.project-input {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
 .task-input input {
     flex: 1;
     min-width: 300px;
@@ -48,6 +57,23 @@ h1 {
     font-size: 16px;
     transition: all 0.3s ease;
     outline: none;
+}
+
+.project-input input {
+    flex: 1;
+    min-width: 200px;
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.project-input input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
 }
 
 .task-input input:focus {
@@ -240,6 +266,10 @@ h1 {
     align-items: center;
     word-break: break-word;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-project-icon {
+    margin-right: 8px;
 }
 
 .task:hover {
