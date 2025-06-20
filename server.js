@@ -53,9 +53,13 @@ app.get('/api/me', (req, res) => {
 
 app.post('/api/signup', (req, res) => {
   const { username, password } = req.body || {};
-  if (!username || !password) return res.status(400).end();
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required.' });
+  }
   const users = loadUsers();
-  if (users[username]) return res.status(400).end();
+  if (users[username]) {
+    return res.status(409).json({ error: 'User already exists.' });
+  }
   const hash = crypto.createHash('sha256').update(password).digest('hex');
   users[username] = hash;
   saveUsers(users);
@@ -65,10 +69,14 @@ app.post('/api/signup', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body || {};
-  if (!username || !password) return res.status(400).end();
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required.' });
+  }
   const users = loadUsers();
   const hash = crypto.createHash('sha256').update(password).digest('hex');
-  if (users[username] !== hash) return res.status(401).end();
+  if (users[username] !== hash) {
+    return res.status(401).json({ error: 'Invalid username or password.' });
+  }
   req.session.user = username;
   res.status(204).end();
 });

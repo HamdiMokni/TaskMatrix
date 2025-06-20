@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout');
     const authBox = document.getElementById('auth');
     const matrixBox = document.getElementById('matrix');
+    const authError = document.getElementById('auth-error');
 
     const addBtn = document.getElementById('add-task');
     const input = document.getElementById('task-input');
@@ -141,6 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function showAuthError(msg) {
+        authError.textContent = msg;
+        authError.style.display = msg ? '' : 'none';
+    }
+
     async function checkAuth() {
         const res = await fetch('/api/me');
         const data = await res.json();
@@ -148,11 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
             authBox.style.display = 'none';
             logoutBtn.style.display = '';
             matrixBox.style.display = '';
+            showAuthError('');
             loadTasks().then(renderTasks);
         } else {
             authBox.style.display = '';
             logoutBtn.style.display = 'none';
             matrixBox.style.display = 'none';
+            showAuthError('');
         }
     }
 
@@ -169,7 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
     async function authSubmit() {
         const username = document.getElementById('auth-user').value.trim();
         const password = document.getElementById('auth-pass').value;
-        if (!username || !password) return;
+        if (!username || !password) {
+            showAuthError('Username and password are required.');
+            return;
+        }
         let res = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -182,7 +193,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ username, password })
             });
         }
-        if (res.ok) checkAuth();
+        if (res.ok) {
+            checkAuth();
+        } else {
+            let msg = 'Authentication failed.';
+            try { const data = await res.json(); if (data.error) msg = data.error; } catch (e) {}
+            showAuthError(msg);
+        }
     }
 
     async function logout() {
