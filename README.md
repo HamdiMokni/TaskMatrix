@@ -1,6 +1,25 @@
 # TaskMatrix
 
-This project provides an interactive Priority vs Urgency matrix (also called an Eisenhower Matrix) for managing tasks. It now includes a small Node.js server so your tasks are saved to `tasks.json` on disk. Start the server and open `http://localhost:3000` in a modern web browser to get started.
+TaskMatrix is a lightweight tool for managing tasks with the Eisenhower priority matrix. It provides a modern web interface backed by a small Node.js server so your tasks are persisted between sessions.
+
+## Installation
+
+1. Make sure you have Node.js installed.
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the server:
+
+```bash
+npm start
+```
+
+Open <http://localhost:3000> in your browser to use the app.
+
+The server stores tasks in a local `tasks.json` file. The file will be created automatically when you first add or modify tasks.
 
 ## Features
 
@@ -8,9 +27,19 @@ This project provides an interactive Priority vs Urgency matrix (also called an 
 - Add tasks to any quadrant
 - Drag and drop tasks between quadrants
 - Delete tasks with the × button
-- Tasks persist on disk using the included Node.js server
+- Persist tasks to disk using the included Node.js server
 - Clear all tasks via the **Clear All** button
 - Print-friendly view via the **Print** button
-- Responsive design that works on desktop and mobile
+- Responsive design for desktop and mobile devices
 
-Run `node server.js` and visit `http://localhost:3000` to use the app.
+## File Overview
+
+- `index.html` – Application markup
+- `style.css` – Styling for the matrix
+- `script.js` – Front-end logic and drag-and-drop handling
+- `server.js` – Express server serving static files and saving tasks
+- `tasks.json` – Generated storage file for your tasks
+
+## Contributing
+
+Issues and pull requests are welcome. Feel free to submit improvements or bug fixes.
