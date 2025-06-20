@@ -218,12 +218,21 @@ document.addEventListener('DOMContentLoaded', () => {
         projects.forEach(p => {
             const div = document.createElement('div');
             div.className = 'project-item';
-            const span = document.createElement('span');
-            span.textContent = `${p.icon ? p.icon + ' ' : ''}${p.name}`;
+
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'project-item-icon';
+            iconSpan.textContent = p.icon || '';
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'project-item-name';
+            nameSpan.textContent = p.name;
+
             const btn = document.createElement('button');
             btn.textContent = '\u00D7';
             btn.addEventListener('click', () => removeProject(p.id));
-            div.appendChild(span);
+
+            div.appendChild(iconSpan);
+            div.appendChild(nameSpan);
             div.appendChild(btn);
             projectList.appendChild(div);
         });
