@@ -11,10 +11,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const printBtn = document.getElementById('print');
     const clearBtn = document.getElementById('clear');
 
+    const openProjectModalBtn = document.getElementById('open-project-modal');
+    const projectModal = document.getElementById('project-modal');
     const addProjectBtn = document.getElementById('add-project');
+    const cancelProjectBtn = document.getElementById('cancel-add-project');
     const projectNameInput = document.getElementById('project-name');
     const projectIconInput = document.getElementById('project-icon');
     const projectSelect = document.getElementById('project-select');
+    const iconOptionButtons = document.querySelectorAll('.icon-option');
 
     const QUADRANTS = ['do-now', 'plan', 'delegate', 'eliminate'];
     let tasks = { 'do-now': [], 'plan': [], 'delegate': [], 'eliminate': [] };
@@ -30,6 +34,23 @@ document.addEventListener('DOMContentLoaded', () => {
     clearBtn.addEventListener('click', clearAll);
     authBtn.addEventListener('click', authSubmit);
     logoutBtn.addEventListener('click', logout);
+
+    openProjectModalBtn.addEventListener('click', () => {
+        projectModal.style.display = 'flex';
+    });
+
+    cancelProjectBtn.addEventListener('click', () => {
+        projectModal.style.display = 'none';
+    });
+
+    iconOptionButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            iconOptionButtons.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            projectIconInput.value = btn.textContent.trim();
+        });
+    });
+
     addProjectBtn.addEventListener('click', addProject);
 
     const lists = document.querySelectorAll('.task-list');
@@ -169,6 +190,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderProjectOptions();
             projectNameInput.value = '';
             projectIconInput.value = '';
+            iconOptionButtons.forEach(b => b.classList.remove('selected'));
+            projectModal.style.display = 'none';
         }
     }
 

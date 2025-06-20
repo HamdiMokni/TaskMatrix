@@ -23,9 +23,7 @@
         <h1>Priority vs Urgency Matrix</h1>
 
         <div class="project-input">
-            <input type="text" id="project-name" placeholder="Project name" maxlength="100">
-            <input type="text" id="project-icon" placeholder="Icon" maxlength="2">
-            <button class="add-btn" id="add-project">Add Project</button>
+            <button class="add-btn" id="open-project-modal">Add Project</button>
         </div>
 
         <div class="task-input">
@@ -94,6 +92,25 @@
                     <div class="task-count" id="count-eliminate">0</div>
                 </div>
                 <ul class="task-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="project-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>Add Project</h2>
+            <input type="text" id="project-name" placeholder="Project name" maxlength="100">
+            <input type="hidden" id="project-icon">
+            <div class="icon-options">
+                <button type="button" class="icon-option">📚</button>
+                <button type="button" class="icon-option">💼</button>
+                <button type="button" class="icon-option">💡</button>
+                <button type="button" class="icon-option">🛠️</button>
+                <button type="button" class="icon-option">📝</button>
+            </div>
+            <div class="modal-actions">
+                <button class="add-btn" id="add-project">Add</button>
+                <button class="control-btn" id="cancel-add-project">Cancel</button>
             </div>
         </div>
     </div>
