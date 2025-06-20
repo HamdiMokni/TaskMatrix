@@ -29,12 +29,44 @@ document.addEventListener('DOMContentLoaded', () => {
         list.addEventListener('dragover', e => {
             e.preventDefault();
             const dragging = document.querySelector('.dragging');
-            if (dragging && e.target.classList.contains('task-list')) {
+            if (!dragging) return;
+            const after = getDragAfterElement(list, e.clientY);
+            if (after == null) {
                 list.appendChild(dragging);
+            } else {
+                list.insertBefore(dragging, after);
             }
         });
-        list.addEventListener('drop', saveState);
+
+        list.addEventListener('dragenter', () => {
+            list.parentElement.classList.add('drag-over');
+        });
+
+        list.addEventListener('dragleave', e => {
+            if (!list.contains(e.relatedTarget)) {
+                list.parentElement.classList.remove('drag-over');
+            }
+        });
+
+        list.addEventListener('drop', e => {
+            e.preventDefault();
+            list.parentElement.classList.remove('drag-over');
+            saveState();
+        });
     });
+
+    function getDragAfterElement(list, y) {
+        const items = [...list.querySelectorAll('.task:not(.dragging)')];
+        return items.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
 
     function addTask() {
         const text = input.value.trim();

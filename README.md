@@ -26,6 +26,7 @@ The server stores tasks in a local `tasks.json` file. The file will be created a
 - Four quadrants: **DO NOW**, **PLAN**, **DELEGATE**, and **ELIMINATE**
 - Add tasks to any quadrant
 - Drag and drop tasks between quadrants
+- Reorder tasks within a quadrant using drag and drop
 - Delete tasks with the × button
 - Persist tasks to disk using the included Node.js server
 - Clear all tasks via the **Clear All** button
