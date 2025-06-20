@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const signupBtn = document.getElementById('signup-btn');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout');
+    const authBox = document.getElementById('auth');
+    const matrixBox = document.getElementById('matrix');
+
     const addBtn = document.getElementById('add-task');
     const input = document.getElementById('task-input');
     const select = document.getElementById('quadrant-select');
@@ -8,14 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const QUADRANTS = ['do-now', 'plan', 'delegate', 'eliminate'];
     let tasks = { 'do-now': [], 'plan': [], 'delegate': [], 'eliminate': [] };
 
-    loadTasks().then(t => {
-        tasks = t;
-        QUADRANTS.forEach(q => {
-            const list = document.getElementById(q).querySelector('.task-list');
-            tasks[q].forEach(task => list.appendChild(createTaskItem(task)));
-        });
-        updateCounts();
-    });
+    checkAuth();
 
     addBtn.addEventListener('click', addTask);
     input.addEventListener('keypress', e => {
@@ -23,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     printBtn.addEventListener('click', () => window.print());
     clearBtn.addEventListener('click', clearAll);
+    signupBtn.addEventListener('click', signup);
+    loginBtn.addEventListener('click', login);
+    logoutBtn.addEventListener('click', logout);
 
     const lists = document.querySelectorAll('.task-list');
     lists.forEach(list => {
@@ -139,5 +141,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 count.textContent = len;
             }
         });
+    }
+
+    async function checkAuth() {
+        const res = await fetch('/api/me');
+        const data = await res.json();
+        if (data.user) {
+            authBox.style.display = 'none';
+            logoutBtn.style.display = '';
+            matrixBox.style.display = '';
+            loadTasks().then(renderTasks);
+        } else {
+            authBox.style.display = '';
+            logoutBtn.style.display = 'none';
+            matrixBox.style.display = 'none';
+        }
+    }
+
+    function renderTasks(t) {
+        tasks = t;
+        QUADRANTS.forEach(q => {
+            const list = document.getElementById(q).querySelector('.task-list');
+            list.innerHTML = '';
+            tasks[q].forEach(task => list.appendChild(createTaskItem(task)));
+        });
+        updateCounts();
+    }
+
+    async function signup() {
+        const username = document.getElementById('signup-user').value.trim();
+        const password = document.getElementById('signup-pass').value;
+        if (!username || !password) return;
+        const res = await fetch('/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        if (res.ok) checkAuth();
+    }
+
+    async function login() {
+        const username = document.getElementById('login-user').value.trim();
+        const password = document.getElementById('login-pass').value;
+        if (!username || !password) return;
+        const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        if (res.ok) checkAuth();
+    }
+
+    async function logout() {
+        await fetch('/api/logout', { method: 'POST' });
+        checkAuth();
     }
 });
