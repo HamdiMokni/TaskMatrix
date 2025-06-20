@@ -6,12 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearBtn = document.getElementById('clear');
 
     const QUADRANTS = ['do-now', 'plan', 'delegate', 'eliminate'];
-    let tasks = loadTasks();
+    let tasks = { 'do-now': [], 'plan': [], 'delegate': [], 'eliminate': [] };
 
-    // populate lists from stored tasks
-    QUADRANTS.forEach(q => {
-        const list = document.getElementById(q).querySelector('.task-list');
-        tasks[q].forEach(t => list.appendChild(createTaskItem(t)));
+    loadTasks().then(t => {
+        tasks = t;
+        QUADRANTS.forEach(q => {
+            const list = document.getElementById(q).querySelector('.task-list');
+            tasks[q].forEach(task => list.appendChild(createTaskItem(task)));
+        });
     });
 
     addBtn.addEventListener('click', addTask);
@@ -61,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return li;
     }
 
-    function saveState() {
+    async function saveState() {
         QUADRANTS.forEach(q => {
             tasks[q] = [];
             const items = document.getElementById(q).querySelectorAll('.task');
@@ -69,21 +71,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 tasks[q].push({ id: li.dataset.id, text: li.firstChild.textContent.trim() });
             });
         });
-        localStorage.setItem('taskMatrixTasks', JSON.stringify(tasks));
+        await fetch('/api/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(tasks)
+        });
     }
 
-    function loadTasks() {
-        const stored = localStorage.getItem('taskMatrixTasks');
-        if (stored) return JSON.parse(stored);
+    async function loadTasks() {
+        try {
+            const res = await fetch('/api/tasks');
+            if (res.ok) return await res.json();
+        } catch (e) {}
         return { 'do-now': [], 'plan': [], 'delegate': [], 'eliminate': [] };
     }
 
-    function clearAll() {
+    async function clearAll() {
         tasks = { 'do-now': [], 'plan': [], 'delegate': [], 'eliminate': [] };
         QUADRANTS.forEach(q => {
             const list = document.getElementById(q).querySelector('.task-list');
             list.innerHTML = '';
         });
-        localStorage.removeItem('taskMatrixTasks');
+        await fetch('/api/tasks', { method: 'DELETE' });
     }
 });

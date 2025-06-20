@@ -1,6 +1,6 @@
 # TaskMatrix
 
-This project provides an interactive Priority vs Urgency matrix (also called an Eisenhower Matrix) for managing tasks. Open `index.html` in a modern web browser to get started.
+This project provides an interactive Priority vs Urgency matrix (also called an Eisenhower Matrix) for managing tasks. It now includes a small Node.js server so your tasks are saved to `tasks.json` on disk. Start the server and open `http://localhost:3000` in a modern web browser to get started.
 
 ## Features
 
@@ -8,9 +8,9 @@ This project provides an interactive Priority vs Urgency matrix (also called an 
 - Add tasks to any quadrant
 - Drag and drop tasks between quadrants
 - Delete tasks with the × button
-- Tasks persist locally using your browser's storage
+- Tasks persist on disk using the included Node.js server
 - Clear all tasks via the **Clear All** button
 - Print-friendly view via the **Print** button
 - Responsive design that works on desktop and mobile
 
-No build step or server is required; everything runs in the browser.
+Run `node server.js` and visit `http://localhost:3000` to use the app.
