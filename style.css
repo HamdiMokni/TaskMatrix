@@ -85,6 +85,12 @@ h1 {
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
+.error-msg {
+    color: #e74c3c;
+    margin-top: 10px;
+    text-align: center;
+}
+
 .add-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
