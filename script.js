@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const signupBtn = document.getElementById('signup-btn');
-    const loginBtn = document.getElementById('login-btn');
+    const authBtn = document.getElementById('auth-btn');
+    const authToggleLink = document.getElementById('auth-toggle-link');
+    let authMode = 'signup';
     const logoutBtn = document.getElementById('logout');
     const authBox = document.getElementById('auth');
     const matrixBox = document.getElementById('matrix');
@@ -22,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     printBtn.addEventListener('click', () => window.print());
     clearBtn.addEventListener('click', clearAll);
-    signupBtn.addEventListener('click', signup);
-    loginBtn.addEventListener('click', login);
+    authBtn.addEventListener('click', authSubmit);
+    authToggleLink.addEventListener('click', toggleAuth);
     logoutBtn.addEventListener('click', logout);
 
     const lists = document.querySelectorAll('.task-list');
@@ -168,11 +169,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCounts();
     }
 
-    async function signup() {
-        const username = document.getElementById('signup-user').value.trim();
-        const password = document.getElementById('signup-pass').value;
+    async function authSubmit() {
+        const username = document.getElementById('auth-user').value.trim();
+        const password = document.getElementById('auth-pass').value;
         if (!username || !password) return;
-        const res = await fetch('/api/signup', {
+        const url = authMode === 'signup' ? '/api/signup' : '/api/login';
+        const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
@@ -180,16 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (res.ok) checkAuth();
     }
 
-    async function login() {
-        const username = document.getElementById('login-user').value.trim();
-        const password = document.getElementById('login-pass').value;
-        if (!username || !password) return;
-        const res = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        });
-        if (res.ok) checkAuth();
+    function toggleAuth(e) {
+        e.preventDefault();
+        authMode = authMode === 'signup' ? 'login' : 'signup';
+        authBtn.textContent = authMode === 'signup' ? 'Sign Up' : 'Log In';
+        authToggleLink.textContent = authMode === 'signup' ? 'Log In' : 'Sign Up';
     }
 
     async function logout() {
