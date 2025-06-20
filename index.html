@@ -7,39 +7,76 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
+    <div class="container">
         <h1>Priority vs Urgency Matrix</h1>
-    </header>
-    <section class="controls">
-        <input type="text" id="task-input" placeholder="Enter a new task">
-        <select id="quadrant-select">
-            <option value="do-now">DO NOW</option>
-            <option value="plan">PLAN</option>
-            <option value="delegate">DELEGATE</option>
-            <option value="eliminate">ELIMINATE</option>
-        </select>
-        <button id="add-task">Add Task</button>
-        <button id="print">Print</button>
-        <button id="clear">Clear All</button>
-    </section>
-    <main id="matrix">
-        <div class="quadrant" id="do-now" data-title="DO NOW">
-            <h2>DO NOW</h2>
-            <ul class="task-list"></ul>
+
+        <div class="task-input">
+            <input type="text" id="task-input" placeholder="Enter a new task..." maxlength="200">
+            <select id="quadrant-select">
+                <option value="do-now">🔥 DO NOW (Urgent + Important)</option>
+                <option value="plan">📅 PLAN (Important, Not Urgent)</option>
+                <option value="delegate">👥 DELEGATE (Urgent, Not Important)</option>
+                <option value="eliminate">🗑️ ELIMINATE (Not Urgent, Not Important)</option>
+            </select>
+            <button class="add-btn" id="add-task">Add Task</button>
         </div>
-        <div class="quadrant" id="plan" data-title="PLAN">
-            <h2>PLAN</h2>
-            <ul class="task-list"></ul>
+
+        <div class="controls">
+            <button class="control-btn" id="clear">Clear All</button>
+            <button class="control-btn" id="print">Print Matrix</button>
         </div>
-        <div class="quadrant" id="delegate" data-title="DELEGATE">
-            <h2>DELEGATE</h2>
-            <ul class="task-list"></ul>
+
+        <div class="matrix">
+            <div class="quadrant" id="do-now">
+                <div class="quadrant-header">
+                    <div class="quadrant-icon">🔥</div>
+                    <div>
+                        <div class="quadrant-title">DO NOW</div>
+                        <div class="quadrant-subtitle">Urgent + Important</div>
+                    </div>
+                    <div class="task-count" id="count-do-now">0</div>
+                </div>
+                <ul class="task-list"></ul>
+            </div>
+
+            <div class="quadrant" id="plan">
+                <div class="quadrant-header">
+                    <div class="quadrant-icon">📅</div>
+                    <div>
+                        <div class="quadrant-title">PLAN</div>
+                        <div class="quadrant-subtitle">Important, Not Urgent</div>
+                    </div>
+                    <div class="task-count" id="count-plan">0</div>
+                </div>
+                <ul class="task-list"></ul>
+            </div>
+
+            <div class="quadrant" id="delegate">
+                <div class="quadrant-header">
+                    <div class="quadrant-icon">👥</div>
+                    <div>
+                        <div class="quadrant-title">DELEGATE</div>
+                        <div class="quadrant-subtitle">Urgent, Not Important</div>
+                    </div>
+                    <div class="task-count" id="count-delegate">0</div>
+                </div>
+                <ul class="task-list"></ul>
+            </div>
+
+            <div class="quadrant" id="eliminate">
+                <div class="quadrant-header">
+                    <div class="quadrant-icon">🗑️</div>
+                    <div>
+                        <div class="quadrant-title">ELIMINATE</div>
+                        <div class="quadrant-subtitle">Not Urgent, Not Important</div>
+                    </div>
+                    <div class="task-count" id="count-eliminate">0</div>
+                </div>
+                <ul class="task-list"></ul>
+            </div>
         </div>
-        <div class="quadrant" id="eliminate" data-title="ELIMINATE">
-            <h2>ELIMINATE</h2>
-            <ul class="task-list"></ul>
-        </div>
-    </main>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
