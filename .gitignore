@@ -1,5 +1,6 @@
 # Node dependencies
 node_modules/
+package-lock.json
 
 # Logs
 logs
@@ -31,7 +32,6 @@ coverage/
 Thumbs.db
 
 # Task data file
-tasks.json
-users.json
-package-lock.json
-projects.json
+# tasks.json
+# users.json
+# projects.json
