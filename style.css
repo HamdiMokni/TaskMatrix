@@ -5,9 +5,9 @@ body {
     background: #f4f4f4;
 }
 header {
-    background: #333;
+    background: linear-gradient(90deg, #4a90e2, #357ABD);
     color: #fff;
-    padding: 10px 20px;
+    padding: 15px 20px;
 }
 .controls {
     display: flex;
@@ -16,6 +16,7 @@ header {
     padding: 10px;
     background: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 4px;
 }
 .controls input[type="text"] {
     flex: 1 1 200px;
@@ -23,6 +24,7 @@ header {
 }
 .controls select, .controls button {
     padding: 5px;
+    border-radius: 4px;
 }
 #matrix {
     display: grid;
@@ -33,6 +35,7 @@ header {
 .quadrant {
     background: #fff;
     border: 1px solid #ccc;
+    border-radius: 4px;
     padding: 10px;
     min-height: 200px;
     display: flex;
@@ -49,11 +52,16 @@ header {
 }
 .task {
     background: #e0e0e0;
+    border-radius: 4px;
     margin-bottom: 5px;
-    padding: 5px;
+    padding: 5px 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background 0.2s;
+}
+.task:hover {
+    background: #d5d5d5;
 }
 .task.dragging {
     opacity: 0.5;
