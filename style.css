@@ -206,6 +206,19 @@ h1 {
 .task-list {
     list-style: none;
     padding: 0;
+    min-height: 60px; /* allow dropping when empty */
+    position: relative;
+}
+
+.task-list:empty::before {
+    content: 'Drop tasks here';
+    color: #ccc;
+    font-style: italic;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 
 .task {
