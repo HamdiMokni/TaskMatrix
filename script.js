@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const list = document.getElementById(q).querySelector('.task-list');
             tasks[q].forEach(task => list.appendChild(createTaskItem(task)));
         });
+        updateCounts();
     });
 
     addBtn.addEventListener('click', addTask);
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         list.appendChild(item);
         input.value = '';
         saveState();
+        updateCounts();
     }
 
     function createTaskItem(task) {
@@ -55,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const del = document.createElement('button');
         del.textContent = '\u00D7';
-        del.addEventListener('click', () => { li.remove(); saveState(); });
+        del.addEventListener('click', () => { li.remove(); saveState(); updateCounts(); });
         li.appendChild(del);
 
         li.addEventListener('dragstart', () => li.classList.add('dragging'));
@@ -76,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(tasks)
         });
+        updateCounts();
     }
 
     async function loadTasks() {
@@ -93,5 +96,16 @@ document.addEventListener('DOMContentLoaded', () => {
             list.innerHTML = '';
         });
         await fetch('/api/tasks', { method: 'DELETE' });
+        updateCounts();
+    }
+
+    function updateCounts() {
+        QUADRANTS.forEach(q => {
+            const count = document.getElementById(`count-${q}`);
+            if (count) {
+                const len = document.getElementById(q).querySelectorAll('.task').length;
+                count.textContent = len;
+            }
+        });
     }
 });
